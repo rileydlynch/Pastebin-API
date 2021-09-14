@@ -4,7 +4,8 @@ const fs = require('fs')
 const PastebinAPI = require('pastebin-ts');
 
 app.engine('html', require('ejs').renderFile);
-app.set('views', 'pastebin' + '/views');
+app.set('views', __dirname + '/views');
+console.log(__dirname)
 app.set('view engine', 'html');
 app.use(express.urlencoded({ extended: true }))
 app.use(express.json())
@@ -17,14 +18,15 @@ app.get("/",(req,res,err) => {
     }
 })
 
-app.post("/createfile",(req,res,err) => {
-    fs.writeFile('./bongo.txt', req.body.pastetext, err => {
+app.post("/createfile",(req,res,err) => { 
+    fs.writeFile(__dirname + '/bongo.txt', req.body.pastetext, err => {
         if (err) {
             console.error(err)
             return
         }
     res.redirect("/pasteit");
     })
+    console.log(__dirname)
 });
 
 //Pastebin section
@@ -38,7 +40,7 @@ app.get("/pasteit",(req,res,err) => {
 
     pastebin
         .createPasteFromFile({
-            'file': './bongo.txt',
+            'file': __dirname + '/bongo.txt',
             'title': 'pastebin-js test'
         })
         .then((data) => {
